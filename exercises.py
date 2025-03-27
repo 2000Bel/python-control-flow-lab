@@ -166,15 +166,8 @@ weather_advice()
 # - Ensure to validate input formats and handle unexpected inputs gracefully.
 
 def determine_season():
-
-    seasons = {
-        "Winter": [("Dec", 21, 31), ("Jan", 1, 31), ("Feb", 1, 28), ("Mar", 1, 19)],
-        "Spring": [("Mar", 20, 31), ("Apr", 1, 30), ("May", 1, 31), ("Jun", 1, 20)],
-        "Summer": [("Jun", 21, 30), ("Jul", 1, 31), ("Aug", 1, 31), ("Sep", 1, 21)],
-        "Fall": [("Sep", 22, 30), ("Oct", 1, 31), ("Nov", 1, 30), ("Dec", 1, 20)],
-    }
+    month = input("Enter the month (e.g., Jan, Feb, Mar): ").strip().capitalize()
     
-    month = input("Enter the month of the year (Jan - Dec): ").strip().capitalize()
     try:
         day = int(input("Enter the day of the month: ").strip())
     except ValueError:
@@ -182,22 +175,21 @@ def determine_season():
         return
 
     valid_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    days_in_month = {"Jan": 31, "Feb": 28, "Mar": 31, "Apr": 30, "May": 31, "Jun": 30,
-                     "Jul": 31, "Aug": 31, "Sep": 30, "Oct": 31, "Nov": 30, "Dec": 31}
 
     if month not in valid_months:
-        print("Invalid month. Please enter a three-letter month abbreviation (e.g., Jan, Feb).")
+        print("Invalid month.")
         return
 
-    if day < 1 or day > days_in_month[month]:
-        print(f"Invalid day. {month} has {days_in_month[month]} days.")
-        return
+    if (month == "Mar" and day >= 20) or month in ["Apr", "May"] or (month == "Jun" and day < 21):
+        season = "spring"
+    elif (month == "Jun" and day >= 21) or month in ["Jul", "Aug"] or (month == "Sep" and day < 23):
+        season = "summer"
+    elif (month == "Sep" and day >= 23) or month in ["Oct", "Nov"] or (month == "Dec" and day < 21):
+        season = "fall"
+    else:
+        season = "winter"
 
-    for season, date_ranges in seasons.items():
-        for m, start_day, end_day in date_ranges:
-            if month == m and start_day <= day <= end_day:
-                print(f"{month} {day} is in {season}.")
-                return
+    print(f"{month} {day} is in {season}.")
 
 determine_season()
 
@@ -220,8 +212,8 @@ determine_season()
 # - Use logical AND, OR, and NOT to check conditions and provide appropriate feedback.
 
 def guess_number():
-    target_number = 42  # Fixed number to guess
-    max_attempts = 5  # Maximum number of guesses
+    target_number = 42 
+    max_attempts = 5  
 
     print("Guess the number (between 1 and 100). You have 5 attempts.")
 
